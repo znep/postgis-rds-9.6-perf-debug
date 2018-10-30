@@ -24,13 +24,14 @@ RUN (cd gdal-2.1.3 && ./configure && make && make install)
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN (apt-get install -y  postgresql-server-dev-9.6 libproj-dev && cd postgis-2.3.4 && ./configure && make && make install)
-RUN ldconfig && /etc/init.d/postgresql restart
+RUN ldconfig
 
 ADD https://znep.com/~marcs/tmp/t19669_8_1.sql.gz /root
 RUN gzip -d /root/t19669_8_1.sql.gz
 
 RUN /etc/init.d/postgresql start && \
   echo 'create extension postgis' | sudo -u postgres psql && \
-  cat t19669_8_1.sql | sudo -u postgres psql
+  cat t19669_8_1.sql | sudo -u postgres psql && \
+  /etc/init.d/postgresql stop
 
 CMD /etc/init.d/postgresql start ; /bin/bash
