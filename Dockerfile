@@ -28,7 +28,7 @@ RUN ldconfig
 
 RUN wget -O - https://znep.com/~marcs/tmp/t19669_8_1.sql.gz | gzip -d > /root/t19669_8_1.sql
 
-RUN /etc/init.d/postgresql start && sleep 2 && \
+RUN /etc/init.d/postgresql start && sleep 10 && \
   echo 'create extension postgis' | sudo -u postgres psql && \
   cat t19669_8_1.sql | sudo -u postgres psql && \
   /etc/init.d/postgresql stop
