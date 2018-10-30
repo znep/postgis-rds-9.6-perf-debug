@@ -26,10 +26,9 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN (apt-get install -y  postgresql-server-dev-9.6 libproj-dev && cd postgis-2.3.4 && ./configure && make && make install)
 RUN ldconfig
 
-ADD https://znep.com/~marcs/tmp/t19669_8_1.sql.gz /root
-RUN gzip -d /root/t19669_8_1.sql.gz
+RUN wget -O - https://znep.com/~marcs/tmp/t19669_8_1.sql.gz | gzip -d > /root/t19669_8_1.sql
 
-RUN /etc/init.d/postgresql start && \
+RUN /etc/init.d/postgresql start && sleep 2 && \
   echo 'create extension postgis' | sudo -u postgres psql && \
   cat t19669_8_1.sql | sudo -u postgres psql && \
   /etc/init.d/postgresql stop
